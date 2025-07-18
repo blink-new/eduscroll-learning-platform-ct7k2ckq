@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Play, Users, BookOpen, Trophy, User } from 'lucide-react-native';
+import { Play, Users, BookOpen, Trophy, User, Share2 } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -27,6 +27,13 @@ export default function TabLayout() {
         options={{
           title: 'Learn',
           tabBarIcon: ({ color, size }) => <Play color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="social"
+        options={{
+          title: 'Social',
+          tabBarIcon: ({ color, size }) => <Share2 color={color} size={size} />,
         }}
       />
       <Tabs.Screen

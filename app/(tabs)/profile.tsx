@@ -15,8 +15,13 @@ import {
   Brain,
   Crown,
   Calendar,
-  Download
+  Download,
+  Heart,
+  MessageCircle,
+  Share2,
+  Bookmark
 } from 'lucide-react-native';
+import { SocialProfile } from '@/components/SocialProfile';
 
 const userProfile = {
   name: 'Alex Chen',
@@ -37,8 +42,8 @@ const userProfile = {
 const stats = [
   { label: 'Videos Watched', value: '342', icon: BookOpen, color: '#6366F1' },
   { label: 'Hours Learned', value: '127', icon: Clock, color: '#10B981' },
-  { label: 'Competitions Won', value: '8', icon: Trophy, color: '#F59E0B' },
-  { label: 'Communities', value: '12', icon: Users, color: '#8B5CF6' },
+  { label: 'Social Posts', value: '45', icon: Share2, color: '#EF4444' },
+  { label: 'Followers', value: '1.2K', icon: Users, color: '#8B5CF6' },
 ];
 
 const achievements = [
@@ -52,9 +57,10 @@ const achievements = [
 
 const recentActivity = [
   { id: 1, type: 'video', title: 'Quantum Physics Basics', time: '2 hours ago', category: 'Physics' },
-  { id: 2, type: 'competition', title: 'Math Championship', time: '1 day ago', category: 'Mathematics' },
-  { id: 3, type: 'community', title: 'Joined Physics Masters', time: '2 days ago', category: 'Physics' },
-  { id: 4, type: 'achievement', title: 'Earned Quiz Master badge', time: '3 days ago', category: 'Achievement' },
+  { id: 2, type: 'social', title: 'Shared study notes on Calculus', time: '4 hours ago', category: 'Social' },
+  { id: 3, type: 'community', title: 'Joined Physics Masters', time: '1 day ago', category: 'Physics' },
+  { id: 4, type: 'social', title: 'Got 50 likes on video explanation', time: '2 days ago', category: 'Social' },
+  { id: 5, type: 'achievement', title: 'Earned Quiz Master badge', time: '3 days ago', category: 'Achievement' },
 ];
 
 export default function Profile() {
@@ -197,7 +203,7 @@ export default function Profile() {
         <View key={activity.id} style={styles.activityItem}>
           <View style={styles.activityIcon}>
             {activity.type === 'video' && <BookOpen color="#6366F1" size={16} />}
-            {activity.type === 'competition' && <Trophy color="#F59E0B" size={16} />}
+            {activity.type === 'social' && <Share2 color="#EF4444" size={16} />}
             {activity.type === 'community' && <Users color="#8B5CF6" size={16} />}
             {activity.type === 'achievement' && <Award color="#10B981" size={16} />}
           </View>
