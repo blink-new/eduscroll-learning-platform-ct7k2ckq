@@ -1,125 +1,644 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { Settings, Bell, Download, Share, Award, BookOpen, Clock, Heart } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { 
+  User, 
+  Settings, 
+  Trophy, 
+  BookOpen, 
+  Clock, 
+  Star, 
+  Award, 
+  Target, 
+  TrendingUp,
+  Users,
+  Brain,
+  Crown,
+  Calendar,
+  Download
+} from 'lucide-react-native';
+
+const userProfile = {
+  name: 'Alex Chen',
+  email: 'alex.chen@email.com',
+  role: 'Student',
+  age: 16,
+  avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+  level: 12,
+  xp: 8450,
+  xpToNext: 1550,
+  streak: 15,
+  joinDate: '2024-01-15',
+  country: 'USA',
+  learningGoal: 'Master Advanced Physics',
+  knowledgeLevel: 'Intermediate',
+};
 
 const stats = [
-  { label: 'Videos Watched', value: '1,247', icon: BookOpen },
-  { label: 'Hours Learned', value: '89.5', icon: Clock },
-  { label: 'Subjects', value: '12', icon: Award },
-  { label: 'Liked Videos', value: '456', icon: Heart },
+  { label: 'Videos Watched', value: '342', icon: BookOpen, color: '#6366F1' },
+  { label: 'Hours Learned', value: '127', icon: Clock, color: '#10B981' },
+  { label: 'Competitions Won', value: '8', icon: Trophy, color: '#F59E0B' },
+  { label: 'Communities', value: '12', icon: Users, color: '#8B5CF6' },
 ];
 
-const menuItems = [
-  { icon: Download, label: 'Downloaded Videos', subtitle: '12 videos available offline' },
-  { icon: Bell, label: 'Notifications', subtitle: 'Manage your preferences' },
-  { icon: Share, label: 'Invite Friends', subtitle: 'Share EduScroll with others' },
-  { icon: Settings, label: 'Settings', subtitle: 'Privacy, account & more' },
+const achievements = [
+  { id: 1, title: 'First Steps', description: 'Completed your first video', icon: '🎯', earned: true },
+  { id: 2, title: 'Week Warrior', description: '7-day learning streak', icon: '🔥', earned: true },
+  { id: 3, title: 'Quiz Master', description: 'Scored 100% on 5 quizzes', icon: '🧠', earned: true },
+  { id: 4, title: 'Community Leader', description: 'Created your first community', icon: '👥', earned: false },
+  { id: 5, title: 'Competition Champion', description: 'Won your first competition', icon: '🏆', earned: true },
+  { id: 6, title: 'Knowledge Seeker', description: 'Watched 100 videos', icon: '📚', earned: true },
+];
+
+const recentActivity = [
+  { id: 1, type: 'video', title: 'Quantum Physics Basics', time: '2 hours ago', category: 'Physics' },
+  { id: 2, type: 'competition', title: 'Math Championship', time: '1 day ago', category: 'Mathematics' },
+  { id: 3, type: 'community', title: 'Joined Physics Masters', time: '2 days ago', category: 'Physics' },
+  { id: 4, type: 'achievement', title: 'Earned Quiz Master badge', time: '3 days ago', category: 'Achievement' },
 ];
 
 export default function Profile() {
-  return (
-    <SafeAreaView className="flex-1 bg-black">
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View className="px-4 pt-4 pb-6">
-          <View className="flex-row justify-between items-center mb-6">
-            <Text className="text-white text-2xl font-bold">Profile</Text>
-            <TouchableOpacity>
-              <Settings color="white" size={24} />
-            </TouchableOpacity>
-          </View>
+  const [selectedTab, setSelectedTab] = useState('Overview');
+  const tabs = ['Overview', 'Achievements', 'Activity', 'Settings'];
 
-          {/* Profile Info */}
-          <View className="items-center mb-8">
-            <View className="relative mb-4">
-              <Image
-                source={{ uri: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face' }}
-                className="w-24 h-24 rounded-full border-4 border-primary"
-              />
-              <View className="absolute -bottom-2 -right-2 bg-primary rounded-full w-8 h-8 items-center justify-center">
-                <Award color="white" size={16} />
-              </View>
+  const progressPercentage = (userProfile.xp / (userProfile.xp + userProfile.xpToNext)) * 100;
+
+  const renderOverview = () => (
+    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+      {/* User Info Card */}
+      <View style={styles.userCard}>
+        <View style={styles.userHeader}>
+          <Image source={{ uri: userProfile.avatar }} style={styles.avatar} />
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>{userProfile.name}</Text>
+            <View style={styles.userRole}>
+              <User color="#6366F1" size={16} />
+              <Text style={styles.roleText}>{userProfile.role}</Text>
+              <Text style={styles.ageText}>• Age {userProfile.age}</Text>
             </View>
-            
-            <Text className="text-white text-xl font-bold mb-1">Alex Johnson</Text>
-            <Text className="text-gray-400 text-sm mb-2">Learning Enthusiast</Text>
-            <View className="bg-accent/20 rounded-full px-3 py-1">
-              <Text className="text-accent text-xs font-medium">🔥 7 day streak</Text>
-            </View>
+            <Text style={styles.userEmail}>{userProfile.email}</Text>
           </View>
-
-          {/* Stats Grid */}
-          <View className="flex-row flex-wrap justify-between mb-8">
-            {stats.map((stat, index) => (
-              <View key={index} className="bg-gray-900 rounded-2xl p-4 items-center" style={{ width: '48%', marginBottom: 12 }}>
-                <stat.icon color="#6366F1" size={24} />
-                <Text className="text-white text-lg font-bold mt-2">{stat.value}</Text>
-                <Text className="text-gray-400 text-xs text-center">{stat.label}</Text>
-              </View>
-            ))}
-          </View>
-
-          {/* Learning Progress */}
-          <View className="bg-gray-900 rounded-2xl p-4 mb-6">
-            <Text className="text-white font-semibold mb-3">This Week's Progress</Text>
-            <View className="space-y-3">
-              <View>
-                <View className="flex-row justify-between mb-1">
-                  <Text className="text-gray-300 text-sm">Physics</Text>
-                  <Text className="text-gray-300 text-sm">8/10 videos</Text>
-                </View>
-                <View className="bg-gray-700 rounded-full h-2">
-                  <View className="bg-primary rounded-full h-2" style={{ width: '80%' }} />
-                </View>
-              </View>
-              
-              <View>
-                <View className="flex-row justify-between mb-1">
-                  <Text className="text-gray-300 text-sm">Mathematics</Text>
-                  <Text className="text-gray-300 text-sm">5/8 videos</Text>
-                </View>
-                <View className="bg-gray-700 rounded-full h-2">
-                  <View className="bg-accent rounded-full h-2" style={{ width: '62.5%' }} />
-                </View>
-              </View>
-              
-              <View>
-                <View className="flex-row justify-between mb-1">
-                  <Text className="text-gray-300 text-sm">History</Text>
-                  <Text className="text-gray-300 text-sm">3/6 videos</Text>
-                </View>
-                <View className="bg-gray-700 rounded-full h-2">
-                  <View className="bg-green-500 rounded-full h-2" style={{ width: '50%' }} />
-                </View>
-              </View>
-            </View>
-          </View>
-
-          {/* Menu Items */}
-          <View className="space-y-3">
-            {menuItems.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                className="bg-gray-900 rounded-2xl p-4 flex-row items-center"
-              >
-                <View className="bg-gray-800 rounded-full p-3 mr-4">
-                  <item.icon color="white" size={20} />
-                </View>
-                <View className="flex-1">
-                  <Text className="text-white font-medium mb-1">{item.label}</Text>
-                  <Text className="text-gray-400 text-sm">{item.subtitle}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          {/* Sign Out */}
-          <TouchableOpacity className="bg-red-500/20 rounded-2xl p-4 mt-6 items-center">
-            <Text className="text-red-400 font-medium">Sign Out</Text>
+          <TouchableOpacity style={styles.settingsButton}>
+            <Settings color="#6B7280" size={20} />
           </TouchableOpacity>
         </View>
-      </ScrollView>
+
+        {/* Level Progress */}
+        <View style={styles.levelSection}>
+          <View style={styles.levelHeader}>
+            <Text style={styles.levelText}>Level {userProfile.level}</Text>
+            <Text style={styles.xpText}>{userProfile.xp} / {userProfile.xp + userProfile.xpToNext} XP</Text>
+          </View>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${progressPercentage}%` }]} />
+          </View>
+        </View>
+
+        {/* Learning Streak */}
+        <View style={styles.streakSection}>
+          <View style={styles.streakItem}>
+            <View style={styles.streakIcon}>
+              <Text style={styles.streakEmoji}>🔥</Text>
+            </View>
+            <View>
+              <Text style={styles.streakNumber}>{userProfile.streak}</Text>
+              <Text style={styles.streakLabel}>Day Streak</Text>
+            </View>
+          </View>
+          <View style={styles.streakItem}>
+            <View style={styles.streakIcon}>
+              <Brain color="#6366F1" size={20} />
+            </View>
+            <View>
+              <Text style={styles.streakNumber}>{userProfile.knowledgeLevel}</Text>
+              <Text style={styles.streakLabel}>Knowledge Level</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      {/* Stats Grid */}
+      <View style={styles.statsGrid}>
+        {stats.map((stat, index) => (
+          <View key={index} style={styles.statCard}>
+            <View style={[styles.statIcon, { backgroundColor: `${stat.color}20` }]}>
+              <stat.icon color={stat.color} size={20} />
+            </View>
+            <Text style={styles.statValue}>{stat.value}</Text>
+            <Text style={styles.statLabel}>{stat.label}</Text>
+          </View>
+        ))}
+      </View>
+
+      {/* Learning Goal */}
+      <View style={styles.goalCard}>
+        <View style={styles.goalHeader}>
+          <Target color="#F59E0B" size={20} />
+          <Text style={styles.goalTitle}>Current Learning Goal</Text>
+        </View>
+        <Text style={styles.goalText}>{userProfile.learningGoal}</Text>
+        <View style={styles.goalProgress}>
+          <View style={styles.goalProgressBar}>
+            <View style={[styles.goalProgressFill, { width: '68%' }]} />
+          </View>
+          <Text style={styles.goalProgressText}>68% Complete</Text>
+        </View>
+      </View>
+    </ScrollView>
+  );
+
+  const renderAchievements = () => (
+    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+      <View style={styles.achievementsGrid}>
+        {achievements.map((achievement) => (
+          <View 
+            key={achievement.id} 
+            style={[
+              styles.achievementCard,
+              !achievement.earned && styles.achievementCardLocked
+            ]}
+          >
+            <View style={styles.achievementIcon}>
+              <Text style={[
+                styles.achievementEmoji,
+                !achievement.earned && styles.achievementEmojiLocked
+              ]}>
+                {achievement.earned ? achievement.icon : '🔒'}
+              </Text>
+            </View>
+            <Text style={[
+              styles.achievementTitle,
+              !achievement.earned && styles.achievementTitleLocked
+            ]}>
+              {achievement.title}
+            </Text>
+            <Text style={[
+              styles.achievementDescription,
+              !achievement.earned && styles.achievementDescriptionLocked
+            ]}>
+              {achievement.description}
+            </Text>
+            {achievement.earned && (
+              <View style={styles.earnedBadge}>
+                <Award color="#F59E0B" size={12} />
+                <Text style={styles.earnedText}>Earned</Text>
+              </View>
+            )}
+          </View>
+        ))}
+      </View>
+    </ScrollView>
+  );
+
+  const renderActivity = () => (
+    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+      <Text style={styles.sectionTitle}>Recent Activity</Text>
+      {recentActivity.map((activity) => (
+        <View key={activity.id} style={styles.activityItem}>
+          <View style={styles.activityIcon}>
+            {activity.type === 'video' && <BookOpen color="#6366F1" size={16} />}
+            {activity.type === 'competition' && <Trophy color="#F59E0B" size={16} />}
+            {activity.type === 'community' && <Users color="#8B5CF6" size={16} />}
+            {activity.type === 'achievement' && <Award color="#10B981" size={16} />}
+          </View>
+          <View style={styles.activityContent}>
+            <Text style={styles.activityTitle}>{activity.title}</Text>
+            <View style={styles.activityMeta}>
+              <Text style={styles.activityCategory}>{activity.category}</Text>
+              <Text style={styles.activityTime}>{activity.time}</Text>
+            </View>
+          </View>
+        </View>
+      ))}
+    </ScrollView>
+  );
+
+  const renderSettings = () => (
+    <ScrollView style={styles.tabContent} showsVerticalScrollIndicator={false}>
+      <View style={styles.settingsSection}>
+        <Text style={styles.sectionTitle}>Account</Text>
+        <TouchableOpacity style={styles.settingsItem}>
+          <User color="#6B7280" size={20} />
+          <Text style={styles.settingsText}>Edit Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.settingsItem}>
+          <Crown color="#6B7280" size={20} />
+          <Text style={styles.settingsText}>Upgrade to Premium</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.settingsSection}>
+        <Text style={styles.sectionTitle}>Learning</Text>
+        <TouchableOpacity style={styles.settingsItem}>
+          <Target color="#6B7280" size={20} />
+          <Text style={styles.settingsText}>Learning Goals</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.settingsItem}>
+          <Brain color="#6B7280" size={20} />
+          <Text style={styles.settingsText}>AI Preferences</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.settingsItem}>
+          <Download color="#6B7280" size={20} />
+          <Text style={styles.settingsText}>Offline Content</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.settingsSection}>
+        <Text style={styles.sectionTitle}>Support</Text>
+        <TouchableOpacity style={styles.settingsItem}>
+          <Text style={styles.settingsText}>Help Center</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.settingsItem}>
+          <Text style={styles.settingsText}>Contact Support</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.settingsItem}>
+          <Text style={styles.settingsText}>Privacy Policy</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.title}>Profile</Text>
+      </View>
+
+      {/* Tabs */}
+      <View style={styles.tabsContainer}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {tabs.map((tab) => (
+            <TouchableOpacity
+              key={tab}
+              style={[
+                styles.tab,
+                selectedTab === tab && styles.activeTab
+              ]}
+              onPress={() => setSelectedTab(tab)}
+            >
+              <Text style={[
+                styles.tabText,
+                selectedTab === tab && styles.activeTabText
+              ]}>
+                {tab}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+
+      {/* Content */}
+      {selectedTab === 'Overview' && renderOverview()}
+      {selectedTab === 'Achievements' && renderAchievements()}
+      {selectedTab === 'Activity' && renderActivity()}
+      {selectedTab === 'Settings' && renderSettings()}
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#000000',
+  },
+  header: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  tabsContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  tab: {
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    marginRight: 16,
+    borderRadius: 20,
+    backgroundColor: '#1F1F1F',
+  },
+  activeTab: {
+    backgroundColor: '#6366F1',
+  },
+  tabText: {
+    color: '#6B7280',
+    fontWeight: '500',
+  },
+  activeTabText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  tabContent: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  userCard: {
+    backgroundColor: '#1F1F1F',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 20,
+  },
+  userHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 16,
+  },
+  userInfo: {
+    flex: 1,
+  },
+  userName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  userRole: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  roleText: {
+    color: '#6366F1',
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+  ageText: {
+    color: '#6B7280',
+    marginLeft: 4,
+  },
+  userEmail: {
+    color: '#9CA3AF',
+    fontSize: 14,
+  },
+  settingsButton: {
+    padding: 8,
+  },
+  levelSection: {
+    marginBottom: 20,
+  },
+  levelHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  levelText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  xpText: {
+    color: '#6B7280',
+    fontSize: 14,
+  },
+  progressBar: {
+    height: 8,
+    backgroundColor: '#2D2D2D',
+    borderRadius: 4,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#6366F1',
+    borderRadius: 4,
+  },
+  streakSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  streakItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  streakIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#2D2D2D',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  streakEmoji: {
+    fontSize: 20,
+  },
+  streakNumber: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  streakLabel: {
+    color: '#6B7280',
+    fontSize: 12,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  statCard: {
+    width: '48%',
+    backgroundColor: '#1F1F1F',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  statIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  statValue: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  statLabel: {
+    color: '#6B7280',
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  goalCard: {
+    backgroundColor: '#1F1F1F',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 20,
+  },
+  goalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  goalTitle: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  goalText: {
+    color: '#9CA3AF',
+    fontSize: 14,
+    marginBottom: 16,
+  },
+  goalProgress: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  goalProgressBar: {
+    flex: 1,
+    height: 6,
+    backgroundColor: '#2D2D2D',
+    borderRadius: 3,
+    marginRight: 12,
+  },
+  goalProgressFill: {
+    height: '100%',
+    backgroundColor: '#F59E0B',
+    borderRadius: 3,
+  },
+  goalProgressText: {
+    color: '#F59E0B',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  achievementsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  achievementCard: {
+    width: '48%',
+    backgroundColor: '#1F1F1F',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  achievementCardLocked: {
+    opacity: 0.5,
+  },
+  achievementIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#2D2D2D',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  achievementEmoji: {
+    fontSize: 24,
+  },
+  achievementEmojiLocked: {
+    fontSize: 20,
+  },
+  achievementTitle: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  achievementTitleLocked: {
+    color: '#6B7280',
+  },
+  achievementDescription: {
+    color: '#9CA3AF',
+    fontSize: 12,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  achievementDescriptionLocked: {
+    color: '#4B5563',
+  },
+  earnedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F59E0B',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  earnedText: {
+    color: '#000000',
+    fontSize: 10,
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+  sectionTitle: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  activityItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1F1F1F',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+  },
+  activityIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#2D2D2D',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  activityContent: {
+    flex: 1,
+  },
+  activityTitle: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  activityMeta: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  activityCategory: {
+    color: '#6366F1',
+    fontSize: 12,
+  },
+  activityTime: {
+    color: '#6B7280',
+    fontSize: 12,
+  },
+  settingsSection: {
+    marginBottom: 32,
+  },
+  settingsItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1F1F1F',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 8,
+  },
+  settingsText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    marginLeft: 16,
+  },
+});

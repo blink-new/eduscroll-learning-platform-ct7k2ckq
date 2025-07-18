@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Home, Search, Bookmark, User } from 'lucide-react-native';
+import { Play, Users, BookOpen, Trophy, User } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -17,7 +17,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: '#6366F1',
         tabBarInactiveTintColor: '#6B7280',
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: '500',
         },
       }}
@@ -25,22 +25,29 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
+          title: 'Learn',
+          tabBarIcon: ({ color, size }) => <Play color={color} size={size} />,
         }}
       />
       <Tabs.Screen
-        name="search"
+        name="communities"
         options={{
-          title: 'Search',
-          tabBarIcon: ({ color, size }) => <Search color={color} size={size} />,
+          title: 'Communities',
+          tabBarIcon: ({ color, size }) => <Users color={color} size={size} />,
         }}
       />
       <Tabs.Screen
-        name="bookmarks"
+        name="library"
         options={{
-          title: 'Saved',
-          tabBarIcon: ({ color, size }) => <Bookmark color={color} size={size} />,
+          title: 'Library',
+          tabBarIcon: ({ color, size }) => <BookOpen color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="competitions"
+        options={{
+          title: 'Compete',
+          tabBarIcon: ({ color, size }) => <Trophy color={color} size={size} />,
         }}
       />
       <Tabs.Screen
