@@ -494,10 +494,10 @@ const styles = StyleSheet.create({
   },
   filterChip: {
     backgroundColor: '#1F1F1F',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginRight: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 6,
   },
   filterChipActive: {
     backgroundColor: '#6366F1',
